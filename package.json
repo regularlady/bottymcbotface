@@ -1,0 +1,22 @@
+{
+  "name": "serverless-chatbot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wonderwoman13/bottymcbotface.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wonderwoman13/bottymcbotface/issues"
+  },
+  "homepage": "https://github.com/wonderwoman13/bottymcbotface#readme",
+  "dependencies": {
+    "gm": "^1.23.0"
+  }
+}

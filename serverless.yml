@@ -6,13 +6,23 @@ provider:
   profile: serverless-chatbot
   stage: dev
   iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - rekognition:DetectFaces
+      Resource: '*'
     - Effect: "Allow"
       Action:
         - s3:GetObject
         - s3:PutObject
       Resource: arn:aws:s3:::${self:custom.uploadBucket}/*
+    - Effect: "Allow"
+      Action:
+        - s3:GetObject
+        - s3:PutObject
+      Resource: arn:aws:s3:::${self:custom.transformBucket}/*
 custom:
-  uploadBucket: ${self:service}-${self:provider.stage}-bjm
+  uploadBucket: ${self:service}-${self:provider.stage}-dev-uploads-bjm
+  transformBucket: ${self:service}-${self:provider.stage}-dev-transformed-bjm
 functions:
   hello:
     handler: handler.endpoint
@@ -29,7 +39,18 @@ functions:
       TEMP_FOLDER: '/tmp/'
   faceswap:
     handler: faceswap.execute
+    environment:
+      TEMP_FOLDER: '/tmp/'
+      OUTPUT_PREFIX: 'output-'
+      UPLOAD_BUCKET: ${self:custom.uploadBucket}
+      TRANSFORM_BUCKET: ${self:custom.transformBucket}
     events:
       - s3:
           bucket: ${self:custom.uploadBucket}
+          event: s3:ObjectCreated:*
+  slackupdate:
+    handler: slackupdate.execute
+    events:
+      - s3:
+          bucket: ${self:custom.transformBucket}
           event: s3:ObjectCreated:*
